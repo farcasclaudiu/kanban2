@@ -5,18 +5,19 @@ import {HttpModule} from "@angular/http";
 import {AppComponent} from "./app.component";
 import {authConfig, firebaseConfig} from "environments/firebaseConfig";
 import {AngularFireModule} from "angularfire2";
-import {AuthService} from "app/shared/auth.service";
-import {LoginUserComponent} from "app/login-user/login-user.component";
-import {DisplayUserComponent} from "app/display-user/display-user.component";
-import {RegisterUserComponent} from "app/register-user/register-user.component";
 import {AlertModule} from "ng2-bootstrap";
+import {ModalModule} from 'ng2-bootstrap';
+
+import {DataService} from "app/shared/data.service";
+import {CardListComponent} from "app/cardlist/cardlist.component";
+import {CardComponent} from "app/card/card.component";
+import {DndModule} from 'ng2-dnd';
 
 @NgModule({
     declarations: [
         AppComponent,
-        DisplayUserComponent,
-        LoginUserComponent,
-        RegisterUserComponent
+        CardListComponent,
+        CardComponent
     ],
     imports: [
         BrowserModule,
@@ -24,9 +25,11 @@ import {AlertModule} from "ng2-bootstrap";
         ReactiveFormsModule,
         HttpModule,
         AlertModule.forRoot(),
+        ModalModule.forRoot(),
+        DndModule.forRoot(),
         AngularFireModule.initializeApp(firebaseConfig, authConfig)
     ],
-    providers: [AuthService],
+    providers: [DataService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
