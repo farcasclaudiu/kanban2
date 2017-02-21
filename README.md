@@ -1,8 +1,8 @@
 # kanban2
 
-## Purpose
+## Project description
 
-This project is a generator for creating new projects with the following features:
+This project is a playground for a Kanban board made with following libraries:
 
 * Angular 2 (based on angular-cli)
 * Firebase via AngualarFire2
@@ -20,6 +20,22 @@ almost directly from the proposed configuration from the Firebase console.
     storageBucket: "???",
     messagingSenderId: "???"
 ```
+
+Initial data:
+
+In "data" folder there is "kanban2-d5e2a-export.json" file with some initial data
+It can be imported in firebase console in a new fresh firebase database.
+
+![alt text](data/importdata.png "Import initial data")
+
+
+
+## Screenshots
+
+![alt text](data/screenshot01.png "Import initial data")
+
+
+
 
 #Angular 2 Specifics
 

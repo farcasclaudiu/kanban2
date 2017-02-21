@@ -50,6 +50,13 @@
 .formfields{
     margin-top: 10px;
 }
+.inline{
+    display: inline-block;
+}
+.listTitle{
+    font-weight: bold;
+    font-size: 1.2em;
+}
 
 
 

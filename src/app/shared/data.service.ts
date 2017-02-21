@@ -32,7 +32,11 @@ export class DataService {
 
 
     getCardLists(){
-        this.cardlists = this.af.database.list('/cardlist') as
+        this.cardlists = this.af.database.list('/cardlist',{
+            query: {
+                orderByChild: 'order'
+            }}
+        ) as
             FirebaseListObservable<CardList[]>;
         return this.cardlists;
     }
