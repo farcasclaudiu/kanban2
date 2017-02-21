@@ -1,0 +1,146 @@
+{
+  "cardlist" : {
+    "-KdRl7OguO3iT-Uapu1B" : {
+      "color" : "orange",
+      "created_at" : "Mon Feb 20 2017 20:24:25 GMT+0200 (GTB Standard Time)",
+      "name" : "IN PPROGRESS",
+      "order" : 1,
+      "projectId" : "-KdRh_nFQT3Im1KfUPMW"
+    },
+    "-KdRmdEq-T-AmCqRvPQq" : {
+      "color" : "green",
+      "created_at" : "Mon Feb 20 2017 20:31:02 GMT+0200 (GTB Standard Time)",
+      "name" : "DONE",
+      "order" : 2,
+      "projectId" : "-KdRh_nFQT3Im1KfUPMW"
+    },
+    "ToDo" : {
+      "color" : "gray",
+      "created_at" : "Mon Feb 20 2017 20:31:02 GMT+0200 (GTB Standard Time)",
+      "name" : "TO DO",
+      "order" : 0,
+      "projectId" : "-KdRh_nFQT3Im1KfUPMW"
+    }
+  },
+  "cards" : {
+    "-KdTXIRPx0OAe8V9tfba" : {
+      "cardListId" : "ToDo",
+      "created_at" : "Tue Feb 21 2017 04:38:52 GMT+0200 (GTB Standard Time)",
+      "description" : "Read it before the  Friday presentation, discuss ideas with the team.",
+      "isExpanded" : true,
+      "name" : "Read \"Don't make me think\"",
+      "order" : 0
+    },
+    "-KdTYCqtrRKoZejMUQaA" : {
+      "cardListId" : "ToDo",
+      "created_at" : "Tue Feb 21 2017 04:42:52 GMT+0200 (GTB Standard Time)",
+      "description" : "Test driven development desc",
+      "isExpanded" : false,
+      "name" : "Test driven development",
+      "order" : 0
+    },
+    "-KdT_XMJHSc5EEdMbZPL" : {
+      "cardListId" : "-KdRl7OguO3iT-Uapu1B",
+      "created_at" : "Tue Feb 21 2017 04:53:00 GMT+0200 (GTB Standard Time)",
+      "description" : "Read tech articles on medium desc",
+      "isExpanded" : false,
+      "name" : "Read tech articles on medium",
+      "order" : 0
+    },
+    "-KdT_hWu_JChDp22_yYe" : {
+      "cardListId" : "-KdRl7OguO3iT-Uapu1B",
+      "created_at" : "Tue Feb 21 2017 04:53:46 GMT+0200 (GTB Standard Time)",
+      "description" : "Write code with the supervision of  another colleague.",
+      "isExpanded" : true,
+      "name" : "Pair programming",
+      "order" : 0
+    },
+    "-KdT_vWZ6zbKoG4ubmgF" : {
+      "cardListId" : "-KdRl7OguO3iT-Uapu1B",
+      "created_at" : "Tue Feb 21 2017 04:54:43 GMT+0200 (GTB Standard Time)",
+      "description" : "Read on time management desc",
+      "isExpanded" : false,
+      "name" : "Read on time management",
+      "order" : 0
+    },
+    "-KdTaA4uy_7iFCw0Bzr5" : {
+      "cardListId" : "-KdRmdEq-T-AmCqRvPQq",
+      "created_at" : "Tue Feb 21 2017 04:55:47 GMT+0200 (GTB Standard Time)",
+      "description" : "Have a meeting with the team in order to get our definitions on Agile aligned.",
+      "isExpanded" : true,
+      "name" : "Meeting on Agile",
+      "order" : 0
+    }
+  },
+  "projects" : {
+    "-KdRh_nFQT3Im1KfUPMW" : {
+      "created_at" : "Mon Feb 20 2017 20:08:59 GMT+0200 (GTB Standard Time)",
+      "name" : "TestProject1"
+    }
+  },
+  "tasks" : {
+    "-KdT_iknV-6SxGejJkZt" : {
+      "cardId" : "-KdT_hWu_JChDp22_yYe",
+      "created_at" : "Tue Feb 21 2017 04:53:51 GMT+0200 (GTB Standard Time)",
+      "description" : "Write code",
+      "isCompleted" : true,
+      "order" : 0
+    },
+    "-KdT_jkICL5Q6SwKZ25c" : {
+      "cardId" : "-KdT_hWu_JChDp22_yYe",
+      "created_at" : "Tue Feb 21 2017 04:53:55 GMT+0200 (GTB Standard Time)",
+      "description" : "Check code",
+      "isCompleted" : false,
+      "order" : 0
+    },
+    "-KdT_mNQeZ0BmJvM-Xay" : {
+      "cardId" : "-KdTXIRPx0OAe8V9tfba",
+      "created_at" : "Tue Feb 21 2017 04:54:06 GMT+0200 (GTB Standard Time)",
+      "description" : "Read book",
+      "isCompleted" : false,
+      "order" : 0
+    },
+    "-KdT_oNftsSW6QX0mgYB" : {
+      "cardId" : "-KdTXIRPx0OAe8V9tfba",
+      "created_at" : "Tue Feb 21 2017 04:54:14 GMT+0200 (GTB Standard Time)",
+      "description" : "Find similar examples",
+      "isCompleted" : false,
+      "order" : 0
+    },
+    "-KdT_q8SgYfNs4USoVh3" : {
+      "cardId" : "-KdTXIRPx0OAe8V9tfba",
+      "created_at" : "Tue Feb 21 2017 04:54:21 GMT+0200 (GTB Standard Time)",
+      "description" : "Prepare presentation",
+      "isCompleted" : false,
+      "order" : 0
+    },
+    "-KdTaDPoEdDcMr9PujkO" : {
+      "cardId" : "-KdTaA4uy_7iFCw0Bzr5",
+      "created_at" : "Tue Feb 21 2017 04:56:00 GMT+0200 (GTB Standard Time)",
+      "description" : "Define Agile methodology",
+      "isCompleted" : true,
+      "order" : 0
+    },
+    "-KdTaFqonDXBEef6F-3o" : {
+      "cardId" : "-KdTaA4uy_7iFCw0Bzr5",
+      "created_at" : "Tue Feb 21 2017 04:56:10 GMT+0200 (GTB Standard Time)",
+      "description" : "What is Scrum?",
+      "isCompleted" : true,
+      "order" : 0
+    },
+    "-KdTaHSJYL0uviZyvOST" : {
+      "cardId" : "-KdTaA4uy_7iFCw0Bzr5",
+      "created_at" : "Tue Feb 21 2017 04:56:17 GMT+0200 (GTB Standard Time)",
+      "description" : "Current implementation",
+      "isCompleted" : true,
+      "order" : 0
+    },
+    "-KdTaKOLbyxnCrJz4GVs" : {
+      "cardId" : "-KdTaA4uy_7iFCw0Bzr5",
+      "created_at" : "Tue Feb 21 2017 04:56:29 GMT+0200 (GTB Standard Time)",
+      "description" : "What to improve?",
+      "isCompleted" : true,
+      "order" : 0
+    }
+  }
+}
