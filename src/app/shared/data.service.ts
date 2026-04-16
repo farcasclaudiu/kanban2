@@ -1,122 +1,132 @@
-import {Injectable, EventEmitter, Output} from "@angular/core";
-import {AngularFire, FirebaseObjectObservable, FirebaseListObservable} from "angularfire2";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {Observable, Subject, ReplaySubject, AsyncSubject} from "rxjs";
-import {Project} from "../models/project-info";
-import {CardList} from "../models/cardlist-info";
-import {Card} from "../models/card-info";
-import {Task} from "../models/task-info";
+import { Injectable, inject, Injector, runInInjectionContext } from '@angular/core';
+import { AngularFireDatabase, AngularFireList, QueryFn } from '@angular/fire/compat/database';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Project } from '../models/project-info';
+import { CardList } from '../models/cardlist-info';
+import { Card } from '../models/card-info';
+import { Task } from '../models/task-info';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DataService {
-    
-    projects: FirebaseListObservable<Project[]>;
-    cardlists: FirebaseListObservable<CardList[]>;
-    cards: FirebaseListObservable<Card[]>;
-    tasks: FirebaseListObservable<Task[]>;
-    
-    constructor(private af: AngularFire) {
-        //console.log("DataService");
-    }
 
-    getProjects(){
-        this.projects = this.af.database.list('/projects') as
-            FirebaseListObservable<Project[]>;
-        return this.projects;
-    }
+  private db = inject(AngularFireDatabase);
+  private injector = inject(Injector);
 
-    addProject(project) {
-        return this.projects.push(project);
-    }
+  private projectsRef: AngularFireList<Project>;
+  private cardlistsRef: AngularFireList<CardList>;
+  private cardsRef: AngularFireList<Card>;
+  private tasksRef: AngularFireList<Task>;
 
+  constructor() {
+    this.projectsRef = this.db.list('/projects');
+    this.cardlistsRef = this.db.list('/cardlist', ref => ref.orderByChild('order'));
+    this.cardsRef = this.db.list('/cards');
+    this.tasksRef = this.db.list('/tasks');
+  }
 
+  private stripKey<T extends { $key?: string }>(obj: T): Omit<T, '$key'> {
+    const copy = { ...obj };
+    delete copy.$key;
+    return copy;
+  }
 
-    getCardLists(){
-        this.cardlists = this.af.database.list('/cardlist',{
-            query: {
-                orderByChild: 'order'
-            }}
-        ) as
-            FirebaseListObservable<CardList[]>;
-        return this.cardlists;
-    }
-    getCardListsById(cardListId:string): FirebaseObjectObservable<CardList> {
-        return this.af.database.object(`/cardlist/${cardListId}`) as FirebaseObjectObservable<CardList>;
-    }
-    getCardListsByOrder(order:number): FirebaseListObservable<CardList[]> {
-        let _cardlist = this.af.database.list('/cardlist',{
-            query: {
-                orderByChild: 'order',
-                equalTo: order,
-            }}
-        ) as FirebaseListObservable<CardList[]>;
-        return _cardlist;
-    }
-    getCachedCardListsById(cardListId:string):CardList {
-        return this.cardlists
-            .filter(d => d.$key == cardListId)
-            .map(d=> d.$key)
-            ;
-            //.first();
-    }
-    getCardListsByProject(projectId: string){
-        let _cardlist = this.af.database.list('/cardlist',{
-            query: {
-                orderByChild: 'projectId',
-                equalTo: projectId,
-            }}
-        ) as FirebaseListObservable<CardList[]>;
-        return _cardlist
-    }
-    addCardList(cardlist){
-        return this.cardlists.push(cardlist);
-    }
+  private queryList<T>(path: string, queryFn: QueryFn): Observable<T[]> {
+    return runInInjectionContext(this.injector, () => {
+      const ref = this.db.list(path, queryFn);
+      return ref.snapshotChanges().pipe(
+        map(changes =>
+          changes.map(c => ({ $key: c.payload.key, ...(c.payload.val() as object) } as T))
+        )
+      );
+    });
+  }
 
+  private snapshotsWithKey<T>(ref: AngularFireList<unknown>): Observable<T[]> {
+    return ref.snapshotChanges().pipe(
+      map(changes =>
+        changes.map(c => ({ $key: c.payload.key, ...(c.payload.val() as object) } as T))
+      )
+    );
+  }
 
+  // --- Projects ---
 
+  getProjects(): Observable<Project[]> {
+    return this.snapshotsWithKey<Project>(this.projectsRef);
+  }
 
-    getCards(){
-        this.cards = this.af.database.list('/cards') as
-            FirebaseListObservable<Card[]>;
-        return this.cards;
-    }
-    getCardsByListId(listId:string){
-        this.cards = this.af.database.list('/cards',{
-            query: {
-                orderByChild: 'cardListId',
-                equalTo: listId,
-            }}
-        ) as
-            FirebaseListObservable<Card[]>;
-        return this.cards;
-    }
-    addCard(card){
-        return this.cards.push(card);
-    }
-    updateCard(key, updCard){
-        return this.cards.update(key, updCard);
-    }
+  addProject(project: Project) {
+    return this.projectsRef.push(this.stripKey(project));
+  }
 
+  // --- CardLists ---
 
+  getCardLists(): Observable<CardList[]> {
+    return this.snapshotsWithKey<CardList>(this.cardlistsRef);
+  }
 
-    getTasks(){
-        this.tasks = this.af.database.list('/tasks') as
-            FirebaseListObservable<Task[]>;
-        return this.cards;
-    }
-    getTasksByCardId(cardId:string){
-        let _tasks = this.af.database.list('/tasks',{
-            query: {
-                orderByChild: 'cardId',
-                equalTo: cardId,
-            }}
-        ) as FirebaseListObservable<Task[]>;
-        return _tasks;
-    }
-    addTask(task){
-        return this.tasks.push(task);
-    }
-    updateTask(key, updTask){
-        return this.tasks.update(key, updTask);
-    }
+  getCardListsById(cardListId: string): Observable<CardList | null> {
+    return this.db.object<CardList>(`/cardlist/${cardListId}`).snapshotChanges().pipe(
+      map(c => ({ $key: c.payload.key, ...c.payload.val() } as CardList))
+    );
+  }
+
+  getCardListsByOrder(order: number): Observable<CardList[]> {
+    return this.queryList<CardList>('/cardlist', ref => ref.orderByChild('order').equalTo(order));
+  }
+
+  getCardListsByProject(projectId: string): Observable<CardList[]> {
+    return this.queryList<CardList>('/cardlist', ref => ref.orderByChild('projectId').equalTo(projectId));
+  }
+
+  addCardList(cardlist: CardList) {
+    return this.cardlistsRef.push(this.stripKey(cardlist));
+  }
+
+  // --- Cards ---
+
+  getCards(): Observable<Card[]> {
+    return this.snapshotsWithKey<Card>(this.cardsRef);
+  }
+
+  getCardsByListId(listId: string): Observable<Card[]> {
+    return this.queryList<Card>('/cards', ref => ref.orderByChild('cardListId').equalTo(listId)).pipe(
+      map(cards => cards.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)))
+    );
+  }
+
+  addCard(card: Card) {
+    return this.cardsRef.push(this.stripKey(card));
+  }
+
+  updateCard(key: string, updCard: Card) {
+    return this.cardsRef.update(key, this.stripKey(updCard));
+  }
+
+  // --- Tasks ---
+
+  getTasks(): Observable<Task[]> {
+    return this.snapshotsWithKey<Task>(this.tasksRef);
+  }
+
+  getTasksByCardId(cardId: string): Observable<Task[]> {
+    return this.queryList<Task>('/tasks', ref => ref.orderByChild('cardId').equalTo(cardId));
+  }
+
+  addTask(task: Task) {
+    return this.tasksRef.push(this.stripKey(task));
+  }
+
+  updateTask(key: string, updTask: Task) {
+    return this.tasksRef.update(key, this.stripKey(updTask));
+  }
+
+  deleteTask(key: string) {
+    return runInInjectionContext(this.injector, () => {
+      return this.db.object('/tasks/' + key).remove();
+    });
+  }
 }

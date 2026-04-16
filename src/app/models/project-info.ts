@@ -1,5 +1,5 @@
 export class Project {
-    $key?: string;
-    name?: string;
-    created_at?: string;
+  $key?: string;
+  name?: string;
+  created_at?: string;
 }

@@ -1,86 +1,231 @@
-.card{
-    background-color: lightblue;
-    border: solid 1px;
-    border-left-width: 5px;
-    margin: 15px;
-}
-.cardTitle{
-    margin-left: 10px; 
-    font-size: 1em;
-}
-.cardDesc{
-    margin-left: 10px; 
-}
-.createCard{
-    padding: 10px;
-    /*background-color: lightcyan;*/
-}
-.fullScreen{
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    clear: both;
-    background: black;
-    opacity: 0.3;
-    padding-left: 35%;
-    padding-right: 35%;
-    padding-top: 35%;
-    padding-bottom: 15%;
-    z-index: 100;
-}
-.fullScreentransparent{
-    position: absolute;
-    clear: both;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background: transparent;
-    z-index: 101;
-}
-.link{
-    cursor: pointer;
-}
-.createTitle{
-    font-weight: bold;
-    color: white;
-}
-.formfields{
-    margin-top: 10px;
-}
-.inline{
-    display: inline-block;
-}
-.listTitle{
-    font-weight: bold;
-    font-size: 1.2em;
+/* Column Panel */
+.column-panel {
+  background: #ebecf0;
+  border-radius: 12px;
+  max-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
 }
 
-
-
-.dnd-drag-start {
-    -moz-transform:scale(0.8);
-    -webkit-transform:scale(0.8);
-    transform:scale(0.8);
-    opacity:0.7;
-    border: 2px dashed #000;
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 6px;
+  border-top: 3px solid #ccc;
+  border-radius: 12px 12px 0 0;
 }
 
-.dnd-drag-enter {
-    opacity:0.7;
-    border: 2px dashed #000;
+.column-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.dnd-drag-over {
-    border: 2px dashed #000;
+.column-dot {
+  font-size: 0.55rem;
 }
 
-.dnd-sortable-drag {
-  -moz-transform:scale(0.9);
-  -webkit-transform:scale(0.9);
-  transform:scale(0.9);
-  opacity:0.7;
-  border: 1px dashed #000;
+.column-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #172b4d;
+}
+
+.column-count {
+  background: rgba(9, 30, 66, 0.08);
+  color: #5e6c84;
+  border-radius: 10px;
+  padding: 1px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Add button */
+.add-card-btn {
+  background: none;
+  border: none;
+  color: #5e6c84;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  transition: background-color 0.15s, color 0.15s;
+}
+.add-card-btn:hover {
+  background-color: rgba(9, 30, 66, 0.08);
+  color: #172b4d;
+}
+
+/* Card list */
+.card-drop-zone {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 8px 8px;
+  min-height: 60px;
+}
+
+.card-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card-item {
+  background: #fff;
+  border-radius: 8px;
+  border-left-width: 4px;
+  border-left-style: solid;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  cursor: grab;
+  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.1);
+  transition: box-shadow 0.15s;
+}
+.card-item:hover {
+  box-shadow: 0 4px 12px rgba(9, 30, 66, 0.15);
+}
+
+/* Create Card Modal */
+.modal-backdrop-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 101;
+  pointer-events: none;
+}
+
+.create-card-modal {
+  background: #fff;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90vw;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.modal-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  color: #fff;
+}
+
+.modal-title-text {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modal-close-btn {
+  cursor: pointer;
+  opacity: 0.85;
+  font-size: 1.1rem;
+}
+.modal-close-btn:hover {
+  opacity: 1;
+}
+
+.modal-form {
+  padding: 16px;
+}
+
+.modal-form label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #5e6c84;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.modal-form .form-control {
+  border: 2px solid #dfe1e6;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  padding: 8px 10px;
+  transition: border-color 0.15s;
+}
+.modal-form .form-control:focus {
+  border-color: #5ba4cf;
+  box-shadow: 0 0 0 1px #5ba4cf;
+  outline: none;
+}
+
+.modal-form .form-group + .form-group {
+  margin-top: 12px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-create {
+  background: #5ba4cf;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.btn-create:hover {
+  background: #4a93be;
+}
+
+.btn-cancel {
+  background: #f4f5f7;
+  color: #5e6c84;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.btn-cancel:hover {
+  background: #ebecf0;
+}
+
+/* CDK Drag-Drop */
+.cdk-drop-list-receiving .card-drop-zone {
+  background-color: rgba(91, 164, 207, 0.1);
+  border: 2px dashed rgba(91, 164, 207, 0.5);
+  border-radius: 6px;
+}
+
+.cdk-drag-preview {
+  opacity: 0.9;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.2;
+  border: 2px dashed #dfe1e6;
+  border-radius: 8px;
+  background: #f4f5f7;
+}
+
+.cdk-drag-animating {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
 }
