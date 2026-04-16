@@ -1,65 +1,118 @@
-import {Component, OnInit, Input, ViewChild} from "@angular/core";
-import {DataService} from "app/shared/data.service";
-import {Observable} from "rxjs";
-import {CardList} from "app/models/cardlist-info";
-import {Card} from "app/models/card-info";
-import {Task} from "app/models/task-info";
-import { ModalDirective } from 'ng2-bootstrap/modal';
+import { Component, OnInit, Input, HostListener, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { DataService } from '../shared/data.service';
+import { Card } from '../models/card-info';
+import { Task } from '../models/task-info';
 
 @Component({
-    selector: 'card',
-    templateUrl: './card.component.html',
-    styleUrls: ['./card.component.css']
+  selector: 'app-card',
+  standalone: true,
+  imports: [FormsModule],
+  templateUrl: './card.component.html',
+  styleUrls: ['./card.component.css']
 })
 export class CardComponent implements OnInit {
-    @ViewChild('childModal') public childModal:ModalDirective;
-    @Input() item: Card;
-    tasks : Task[]
+  @Input() item!: Card;
+  tasks: Task[] = [];
+  showModal = false;
+  taskToDelete: Task | null = null;
+  newtaskdesc = '';
 
-    newtaskdesc;
+  editingTitle = false;
+  editTitle = '';
+  editingDesc = false;
+  editDesc = '';
 
+  private dataService = inject(DataService);
 
-    constructor(private dataService: DataService) {
-        //console.log(this.item);
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.showModal) {
+      this.hideModal();
     }
+  }
 
-    ngOnInit() {
-        //console.log(this.item);
-        this.dataService.getTasksByCardId(this.item.$key)
-            .subscribe(data => {
-                this.tasks = data;
-            })
-    }
+  ngOnInit(): void {
+    this.dataService.getTasksByCardId(this.item.$key!)
+      .subscribe(data => {
+        this.tasks = data;
+      });
+  }
 
-    addNewTask(){
-        //console.log('Add new subtask!');
-        let newTask = new Task();
-        newTask.cardId = this.item.$key;
-        newTask.description = this.newtaskdesc;
-        newTask.isCompleted = false;
-        newTask.order = 0;
-        newTask.created_at = new Date().toString();
-        this.dataService.addTask(newTask)
-            .then(() => {
-                this.newtaskdesc = '';
-            });
-    }
+  startEditTitle(): void {
+    this.editTitle = this.item.name ?? '';
+    this.editingTitle = true;
+  }
 
-    deleteTask(task){
-        //console.log(task);
-        this.childModal.show();
+  saveTitle(): void {
+    if (!this.editingTitle) return;
+    this.editingTitle = false;
+    const trimmed = this.editTitle.trim();
+    if (trimmed && trimmed !== this.item.name) {
+      this.item.name = trimmed;
+      this.dataService.updateCard(this.item.$key!, this.item);
     }
-    public hideChildModal():void {
-        this.childModal.hide();
-    }
+  }
 
-    changeTaskCompleted(task){
-        //console.log(task);
-        this.dataService.updateTask(task.$key, task);
-    }
+  cancelEditTitle(): void {
+    this.editingTitle = false;
+  }
 
-    clickCarret(){
-        this.item.isExpanded = !this.item.isExpanded;
-        this.dataService.updateCard(this.item.$key,this.item);
+  startEditDesc(): void {
+    this.editDesc = this.item.description ?? '';
+    this.editingDesc = true;
+  }
+
+  saveDesc(): void {
+    if (!this.editingDesc) return;
+    this.editingDesc = false;
+    const trimmed = this.editDesc.trim();
+    if (trimmed !== this.item.description) {
+      this.item.description = trimmed;
+      this.dataService.updateCard(this.item.$key!, this.item);
     }
+  }
+
+  cancelEditDesc(): void {
+    this.editingDesc = false;
+  }
+
+  addNewTask(): void {
+    const newTask = new Task();
+    newTask.cardId = this.item.$key!;
+    newTask.description = this.newtaskdesc;
+    newTask.isCompleted = false;
+    newTask.order = 0;
+    newTask.created_at = new Date().toString();
+    this.dataService.addTask(newTask)
+      .then(() => {
+        this.newtaskdesc = '';
+      });
+  }
+
+  deleteTask(task: Task): void {
+    this.taskToDelete = task;
+    this.showModal = true;
+  }
+
+  hideModal(): void {
+    this.showModal = false;
+    this.taskToDelete = null;
+  }
+
+  confirmDeleteTask(): void {
+    if (this.taskToDelete?.$key) {
+      this.dataService.deleteTask(this.taskToDelete.$key);
+    }
+    this.hideModal();
+  }
+
+  changeTaskCompleted(task: Task): void {
+    this.dataService.updateTask(task.$key!, task);
+  }
+
+  clickCarret(): void {
+    this.item.isExpanded = !this.item.isExpanded;
+    this.dataService.updateCard(this.item.$key!, this.item);
+  }
 }

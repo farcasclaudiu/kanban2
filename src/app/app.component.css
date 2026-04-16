@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.board-header {
+  padding: 16px 0 12px;
+  border-bottom: 3px solid #5ba4cf;
+  margin-bottom: 0;
+}
+
+.board-header h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #172b4d;
+  margin: 0;
+}
+
+.board {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 0;
+  overflow-x: auto;
+  height: calc(100% - 60px);
+}
+
+.board-col {
+  flex: 0 0 320px;
+  max-height: 100%;
+}

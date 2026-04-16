@@ -1,12 +1,12 @@
-<div class="container">
-    <h1 class="page-header">
-        {{title}}
-    </h1>
-    <div class="row">
-
-        <div *ngFor="let cardlist of cardlists" class="col-sm-4">
-            <cardlist [item]="cardlist">
-            </cardlist>
+<div class="container board-header">
+    <h1>{{title}}</h1>
+</div>
+<div class="container board">
+    @for (cardlist of cardlists; track cardlist.$key) {
+        <div class="board-col">
+            <app-cardlist [item]="cardlist"
+                          [connectedDropLists]="getConnectedDropLists(cardlist.$key!)">
+            </app-cardlist>
         </div>
-    </div>
+    }
 </div>

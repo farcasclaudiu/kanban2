@@ -1,67 +1,56 @@
-import {Component, OnInit} from "@angular/core";
-import {DataService} from "app/shared/data.service";
-import {Observable} from "rxjs";
-
-import {Project} from "app/models/project-info";
-import {CardList} from "app/models/cardlist-info";
-import {Card} from "app/models/card-info";
+import { Component, OnInit, inject } from '@angular/core';
+import { DataService } from './shared/data.service';
+import { Project } from './models/project-info';
+import { CardList } from './models/cardlist-info';
+import { CardListComponent } from './cardlist/cardlist.component';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+  selector: 'app-root',
+  standalone: true,
+  imports: [CardListComponent],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit  {
-    title = 'The Kanban Board';
-    projects: Project[];
-    cardlists: CardList[];
+export class AppComponent implements OnInit {
+  title = 'The Kanban Board';
+  projects: Project[] = [];
+  cardlists: CardList[] = [];
 
-    constructor(private dataService: DataService) {
-    }
+  private dataService = inject(DataService);
 
-    ngOnInit(){
-        this.dataService.getProjects()
-            .subscribe(data => {
-                this.projects = data;
-                let firstProject = this.projects[0];
-                //console.log(firstProject);
-                // this.addAddCardList(
-                //     'Done', 
-                //     firstProject.$key,
-                //     'green'
-                // );
-            });
-        this.dataService.getCardLists()
-            .subscribe(c => this.cardlists = c)
-        ;
-        this.dataService.getCards();
-        this.dataService.getTasks();
-        //this.addProject("TestProject1");
-    }
+  ngOnInit(): void {
+    this.dataService.getProjects()
+      .subscribe(data => {
+        this.projects = data;
+      });
+    this.dataService.getCardLists()
+      .subscribe(c => this.cardlists = c);
+    this.dataService.getCards();
+    this.dataService.getTasks();
+  }
 
-    addProject(name: string)
-    {
-        let created_at = new Date().toString();
-        let newProject:Project = new Project();
-        newProject.name = name;
-        newProject.created_at= created_at;
-        this.dataService.addProject(newProject);
-    }
+  addProject(name: string): void {
+    const created_at = new Date().toString();
+    const newProject = new Project();
+    newProject.name = name;
+    newProject.created_at = created_at;
+    this.dataService.addProject(newProject);
+  }
 
-    addCardList(
-        name: string,
-        projectId: string,
-        color: string,
-        order: number)
-    {
-        let created_at = new Date().toString();
-        let newCardList:CardList = new CardList();
-        newCardList.name = name;
-        newCardList.projectId = projectId;
-        newCardList.color = color;
-        newCardList.order = order;
-        newCardList.created_at = created_at;
-        this.dataService.addCardList(newCardList);
-    }
+  getConnectedDropLists(currentKey: string): string[] {
+    return this.cardlists
+      .filter(c => c.$key !== currentKey)
+      .map(c => c.$key!);
+  }
 
+  addCardList(name: string, projectId: string, color: string, order: number): void {
+    const created_at = new Date().toString();
+    const newCardList = new CardList();
+    newCardList.name = name;
+    newCardList.projectId = projectId;
+    newCardList.color = color;
+    newCardList.order = order;
+    newCardList.created_at = created_at;
+    this.dataService.addCardList(newCardList);
+  }
 }

@@ -1,48 +1,76 @@
-<div class="cardTitle inline">
-    <div class="carret" (click)="clickCarret()">
-    <i class="fa fa-caret-right" *ngIf="!item.isExpanded"></i>
-    <i class="fa fa-caret-down" *ngIf="item.isExpanded"></i>
+<div class="cardTitle">
+    <div class="carret" (click)="clickCarret()" tabindex="0" role="button" (keydown.enter)="clickCarret()" (keydown.space)="clickCarret()">
+    @if (!item.isExpanded) {
+      <i class="fa fa-caret-right"></i>
+    }
+    @if (item.isExpanded) {
+      <i class="fa fa-caret-down"></i>
+    }
     </div>
-    <div class="titleText">
-    {{item.name}}
-    </div>
+    @if (editingTitle) {
+      <input class="edit-input title-input"
+             [(ngModel)]="editTitle"
+             (blur)="saveTitle()"
+             (keydown.enter)="saveTitle()"
+             (keydown.escape)="cancelEditTitle()">
+    } @else {
+      <div class="titleText" tabindex="0" role="button" (click)="startEditTitle()" (keydown.enter)="startEditTitle()">
+        @if (item.name) {
+          {{item.name}}
+        } @else {
+          <span class="placeholder">Click to add title</span>
+        }
+      </div>
+    }
 </div>
-<div *ngIf="item.isExpanded">
-    <div class="cardDesc">
-        {{item.description}}
-    </div>
-    <div class="tasklist">
-        <div *ngFor="let task of tasks" class="newtask">
-            <input type="checkbox" [(ngModel)]="task.isCompleted" (ngModelChange)="changeTaskCompleted(task)"  class="inline-block">
-            <span class="inline-block">
-            {{task.description}}
-            </span>
-            <span class="inline-block glyphicon glyphicon-trash link" (click)="deleteTask(task)"></span>
+@if (item.isExpanded) {
+    <div>
+        @if (editingDesc) {
+          <textarea class="edit-input desc-input"
+                    [(ngModel)]="editDesc"
+                    (blur)="saveDesc()"
+                    (keydown.escape)="cancelEditDesc()"
+                    rows="3">
+          </textarea>
+        } @else {
+          <div class="cardDesc" tabindex="0" role="button" (click)="startEditDesc()" (keydown.enter)="startEditDesc()">
+              {{item.description}}
+          </div>
+        }
+        <div class="tasklist">
+            @for (task of tasks; track task.$key) {
+              <div class="task-item" [class.completed]="task.isCompleted">
+                  <input type="checkbox" [(ngModel)]="task.isCompleted" (ngModelChange)="changeTaskCompleted(task)">
+                  <span class="task-text">{{task.description}}</span>
+                  <span class="task-trash fa fa-trash" (click)="deleteTask(task)" tabindex="0" role="button" (keydown.enter)="deleteTask(task)"></span>
+              </div>
+            }
+        </div>
+        <div class="newtask-input">
+            <form (submit)="addNewTask()">
+                <input type="text" id="newtask" placeholder="Add subtask and hit enter" [(ngModel)]="newtaskdesc" name="newtask">
+            </form>
         </div>
     </div>
-    <div class="newtask">
-        <form (submit)="addNewTask()">
-            <input type="text" class="form-control newtask" id="newtask" placeholder="Add subtask and hit enter" [(ngModel)]="newtaskdesc" name="newtask">
-        </form>
-    </div>
-</div>
+}
 
-
-
-<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
+@if (showModal) {
+  <div class="modal-backdrop-overlay" (click)="hideModal()" (mousedown)="$event.stopPropagation()" tabindex="0" role="button" (keydown.enter)="hideModal()"></div>
+  <div class="delete-modal-overlay" (mousedown)="$event.stopPropagation()">
+    <div class="create-card-modal">
       <div class="modal-header">
-        <h4 class="modal-title pull-left">Delete task</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+        <h4 class="modal-title pull-left">Delete subtask</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        Not implement!<br>
-        Works as per specs!<br>
-        Carret is not carrot :)
+      <div class="modal-body" style="padding: 16px;">
+        <p>Delete "{{taskToDelete?.description}}"?</p>
+        <div class="modal-actions">
+          <button type="button" class="btn-delete" (click)="confirmDeleteTask()">Delete</button>
+          <button type="button" class="btn-cancel" (click)="hideModal()">Cancel</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+}
