@@ -3,29 +3,83 @@
   height: 100%;
 }
 
+/* Mobile-first: full-width container with horizontal padding */
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
 .board-header {
-  padding: 16px 0 12px;
+  padding: 14px 0 10px;
   border-bottom: 3px solid #5ba4cf;
   margin-bottom: 0;
 }
 
 .board-header h1 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #172b4d;
   margin: 0;
+  /* Prevent long titles from overflowing */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* Mobile-first: columns stack vertically, full-width */
 .board {
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 20px 0;
-  overflow-x: auto;
-  height: calc(100% - 60px);
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 0;
+  height: auto;
+  min-height: 0;
 }
 
 .board-col {
-  flex: 0 0 320px;
-  max-height: 100%;
+  flex: 1 1 auto;
+  width: 100%;
+  max-height: none;
+}
+
+/* Tablet+: switch to horizontal scrolling board */
+@media (min-width: 600px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .board-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .board {
+    flex-direction: row;
+    align-items: flex-start;
+    overflow-x: auto;
+    height: calc(100% - 60px);
+    gap: 16px;
+    padding: 20px 0;
+    /* Smooth scroll on touch devices */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Fixed-width columns on tablet+ */
+  .board-col {
+    flex: 0 0 300px;
+    max-height: 100%;
+    width: auto;
+  }
+}
+
+/* Desktop+: wider columns */
+@media (min-width: 960px) {
+  .container {
+    padding: 0 24px;
+  }
+
+  .board-col {
+    flex: 0 0 320px;
+  }
 }

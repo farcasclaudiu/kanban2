@@ -1,7 +1,16 @@
-/* Global styles */
+/* Global styles — mobile-first base */
 html, body {
   height: 100%;
   margin: 0;
   background-color: #f4f5f7;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  /* Prevent horizontal overflow from any element */
+  overflow-x: hidden;
+  /* Use border-box globally so padding never causes overflow */
+  box-sizing: border-box;
+}
+
+/* Ensure all children inherit border-box */
+*, *::before, *::after {
+  box-sizing: inherit;
 }
