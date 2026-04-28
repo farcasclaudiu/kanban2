@@ -2,7 +2,8 @@
 .column-panel {
   background: #ebecf0;
   border-radius: 12px;
-  max-height: calc(100vh - 140px);
+  /* Fluid height: fills column on mobile, capped on desktop */
+  max-height: none;
   display: flex;
   flex-direction: column;
 }
@@ -20,6 +21,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  /* Allow title to truncate if space is tight */
+  min-width: 0;
+  flex: 1;
 }
 
 .column-dot {
@@ -30,6 +34,10 @@
   font-weight: 700;
   font-size: 0.95rem;
   color: #172b4d;
+  /* Truncate long column names on small screens */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .column-count {
@@ -39,18 +47,25 @@
   padding: 1px 8px;
   font-size: 0.75rem;
   font-weight: 600;
+  flex-shrink: 0;
 }
 
-/* Add button */
+/* Add button — enlarged touch target for mobile (44px min) */
 .add-card-btn {
   background: none;
   border: none;
   color: #5e6c84;
   cursor: pointer;
-  padding: 4px 8px;
+  /* 44px touch target area */
+  padding: 10px 12px;
   border-radius: 6px;
   font-size: 0.85rem;
   transition: background-color 0.15s, color 0.15s;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .add-card-btn:hover {
   background-color: rgba(9, 30, 66, 0.08);
@@ -63,6 +78,8 @@
   overflow-y: auto;
   padding: 4px 8px 8px;
   min-height: 60px;
+  /* Limit height on mobile so stacked columns don't push everything off-screen */
+  max-height: 50vh;
 }
 
 .card-list {
@@ -76,7 +93,7 @@
   border-radius: 8px;
   border-left-width: 4px;
   border-left-style: solid;
-  padding: 8px 10px;
+  padding: 10px 12px;
   margin-bottom: 8px;
   cursor: grab;
   box-shadow: 0 1px 2px rgba(9, 30, 66, 0.1);
@@ -86,7 +103,7 @@
   box-shadow: 0 4px 12px rgba(9, 30, 66, 0.15);
 }
 
-/* Create Card Modal */
+/* Create Card Modal — mobile-first: full-width with margin */
 .modal-backdrop-overlay {
   position: fixed;
   inset: 0;
@@ -98,18 +115,20 @@
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   z-index: 101;
   pointer-events: none;
+  /* Slide-up modal feel on mobile */
+  padding: 0;
 }
 
 .create-card-modal {
   background: #fff;
-  border-radius: 12px;
-  width: 400px;
-  max-width: 90vw;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 12px 12px 0 0;
+  width: 100%;
+  max-width: 100vw;
+  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   pointer-events: auto;
 }
@@ -126,12 +145,23 @@
   font-size: 1rem;
   font-weight: 600;
   margin: 0;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* Close button — 44px touch target */
 .modal-close-btn {
   cursor: pointer;
   opacity: 0.85;
   font-size: 1.1rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .modal-close-btn:hover {
   opacity: 1;
@@ -153,7 +183,9 @@
   border: 2px solid #dfe1e6;
   border-radius: 6px;
   font-size: 0.9rem;
-  padding: 8px 10px;
+  /* Larger padding for easier touch input */
+  padding: 10px 12px;
+  width: 100%;
   transition: border-color 0.15s;
 }
 .modal-form .form-control:focus {
@@ -172,15 +204,17 @@
   margin-top: 16px;
 }
 
+/* Buttons — 44px min-height for touch targets */
 .btn-create {
   background: #5ba4cf;
   color: #fff;
   border: none;
   border-radius: 6px;
-  padding: 8px 20px;
+  padding: 10px 20px;
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
+  min-height: 44px;
   transition: background-color 0.15s;
 }
 .btn-create:hover {
@@ -192,14 +226,37 @@
   color: #5e6c84;
   border: none;
   border-radius: 6px;
-  padding: 8px 20px;
+  padding: 10px 20px;
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
+  min-height: 44px;
   transition: background-color 0.15s;
 }
 .btn-cancel:hover {
   background: #ebecf0;
+}
+
+/* Tablet+: center the modal instead of bottom-sheet */
+@media (min-width: 600px) {
+  .card-drop-zone {
+    max-height: calc(100vh - 140px);
+  }
+
+  .column-panel {
+    max-height: calc(100vh - 140px);
+  }
+
+  .modal-overlay {
+    align-items: center;
+  }
+
+  .create-card-modal {
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90vw;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
 }
 
 /* CDK Drag-Drop */

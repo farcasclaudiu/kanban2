@@ -6,15 +6,22 @@
   font-size: 0.9rem;
   font-weight: 600;
   color: #172b4d;
+  /* Prevent overflow on narrow screens */
+  min-width: 0;
 }
 
+/* Caret toggle — 44px touch target for mobile */
 .carret {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: #5e6c84;
   font-size: 0.85rem;
-  padding: 2px;
-  border-radius: 3px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 4px;
+  flex-shrink: 0;
 }
 .carret:hover {
   background-color: rgba(9, 30, 66, 0.08);
@@ -23,9 +30,12 @@
 .titleText {
   flex: 1;
   cursor: pointer;
-  padding: 2px 4px;
+  padding: 8px 4px;
   border-radius: 4px;
   line-height: 1.3;
+  min-width: 0;
+  /* Allow long titles to wrap on mobile */
+  word-break: break-word;
 }
 .titleText:hover {
   background-color: rgba(9, 30, 66, 0.08);
@@ -43,21 +53,22 @@
   font-size: 0.82rem;
   color: #5e6c84;
   cursor: pointer;
-  padding: 3px 5px;
+  padding: 8px 5px;
   border-radius: 4px;
   line-height: 1.4;
+  word-break: break-word;
 }
 .cardDesc:hover {
   background-color: rgba(9, 30, 66, 0.08);
 }
 
-/* Edit inputs */
+/* Edit inputs — mobile-friendly sizing */
 .edit-input {
   width: 100%;
-  padding: 5px 7px;
+  padding: 8px 10px;
   border: 2px solid #5ba4cf;
   border-radius: 4px;
-  font-size: inherit;
+  font-size: 16px; /* 16px prevents iOS auto-zoom on input focus */
   font-family: inherit;
   box-sizing: border-box;
   outline: none;
@@ -79,7 +90,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 3px 0;
+  padding: 6px 0;
   font-size: 0.82rem;
   color: #172b4d;
 }
@@ -89,18 +100,35 @@
   color: #b0b8c4;
 }
 
-.task-text {
-  flex: 1;
+/* Enlarge checkbox for touch */
+.task-item input[type="checkbox"] {
+  min-width: 20px;
+  min-height: 20px;
+  flex-shrink: 0;
 }
 
+.task-text {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+/* Trash icon — 44px touch target, always visible on touch devices */
 .task-trash {
   color: #b0b8c4;
   cursor: pointer;
-  font-size: 0.75rem;
-  padding: 2px 4px;
-  border-radius: 3px;
-  opacity: 0;
-  transition: opacity 0.15s, color 0.15s;
+  font-size: 0.85rem;
+  padding: 10px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+  /* Always visible on touch devices since there's no hover */
+  opacity: 0.6;
 }
 .task-item:hover .task-trash {
   opacity: 1;
@@ -118,8 +146,9 @@
   border: none;
   border-bottom: 1px solid #dfe1e6;
   border-radius: 0;
-  font-size: 0.82rem;
-  padding: 4px 2px;
+  /* 16px prevents iOS auto-zoom */
+  font-size: 16px;
+  padding: 8px 2px;
   background: transparent;
   width: 100%;
   box-sizing: border-box;
@@ -129,7 +158,7 @@
   outline: none;
 }
 
-/* Delete Modal */
+/* Delete Modal — mobile-first bottom-sheet style */
 .modal-backdrop-overlay {
   position: fixed;
   inset: 0;
@@ -142,7 +171,7 @@
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   z-index: 101;
   pointer-events: none;
@@ -151,10 +180,11 @@
 
 .delete-modal-overlay .create-card-modal {
   pointer-events: auto;
-  width: 340px;
+  width: 100%;
+  max-width: 100vw;
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   cursor: default;
 }
@@ -165,8 +195,7 @@
   justify-content: space-between;
   padding: 12px 16px;
   background-color: #e44;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  border-radius: 12px 12px 0 0;
   color: white;
   font-weight: bold;
 }
@@ -178,8 +207,9 @@
   color: #fff;
   opacity: 0.8;
   font-size: 1rem;
-  width: 28px;
-  height: 28px;
+  /* 44px touch target */
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.2);
@@ -193,14 +223,12 @@
   background: rgba(255, 255, 255, 0.35);
   opacity: 1;
 }
-.modal-header .close:hover {
-  opacity: 1;
-}
 
 .modal-body p {
   margin: 0 0 12px;
   color: #172b4d;
   font-size: 0.9rem;
+  word-break: break-word;
 }
 
 .modal-actions {
@@ -213,10 +241,11 @@
   color: #fff;
   border: none;
   border-radius: 6px;
-  padding: 8px 20px;
+  padding: 10px 20px;
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
+  min-height: 44px;
   transition: background-color 0.15s;
 }
 .btn-delete:hover {
@@ -228,12 +257,31 @@
   color: #5e6c84;
   border: none;
   border-radius: 6px;
-  padding: 8px 20px;
+  padding: 10px 20px;
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
+  min-height: 44px;
   transition: background-color 0.15s;
 }
 .btn-cancel:hover {
   background: #ebecf0;
+}
+
+/* Tablet+: centered modal instead of bottom-sheet */
+@media (min-width: 600px) {
+  .delete-modal-overlay {
+    align-items: center;
+  }
+
+  .delete-modal-overlay .create-card-modal {
+    width: 340px;
+    max-width: 90vw;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  .modal-header {
+    border-radius: 12px 12px 0 0;
+  }
 }
