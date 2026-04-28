@@ -2,8 +2,10 @@ export const firebaseConfig = {
   apiKey: '',
   authDomain: '',
   databaseURL: '',
+  projectId: '',
   storageBucket: '',
-  messagingSenderId: ''
+  messagingSenderId: '',
+  appId: ''
 };
 
 export const recaptchaSiteKey = '';
