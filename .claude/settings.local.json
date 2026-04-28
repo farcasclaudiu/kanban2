@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm audit *)",
+      "Bash(ls /Users/claudiuf/Projects/kanban2/*.lock /Users/claudiuf/Projects/kanban2/yarn.lock)",
+      "Bash(npm -v)",
+      "Bash(npm i *)",
+      "Bash(npm install *)",
+      "Bash(npm view *)",
+      "Bash(grep -v \"^--$\")",
+      "Bash(sort -t: -k2 -rn)",
+      "Bash(ls *)",
+      "Bash(npm --version)",
+      "mcp__zai-mcp-server__analyze_image",
+      "Bash(npx *)",
+      "Bash(node *)"
+    ]
+  }
+}
