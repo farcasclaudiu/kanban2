@@ -43,11 +43,11 @@ export class CardListComponent implements OnInit {
   }
 
   saveAddCard(): void {
-    this.addCard(this.cardname, this.carddescription, true, this.item.$key!, 0);
+    this.addCard(this.cardname, this.carddescription, true, this.item.$key!, 0, this.item.color);
     this.toShowAddCard = false;
   }
 
-  addCard(name: string, description: string, isExpanded: boolean, cardListId: string, order: number): void {
+  addCard(name: string, description: string, isExpanded: boolean, cardListId: string, order: number, status?: string): void {
     const created_at = new Date().toString();
     const newCard = new Card();
     newCard.name = name;
@@ -55,6 +55,7 @@ export class CardListComponent implements OnInit {
     newCard.cardListId = cardListId;
     newCard.isExpanded = isExpanded;
     newCard.order = order;
+    newCard.status = status;
     newCard.created_at = created_at;
     this.dataService.addCard(newCard);
   }
@@ -74,6 +75,7 @@ export class CardListComponent implements OnInit {
     this.cards.forEach((card, i) => {
       card.cardListId = this.item.$key!;
       card.order = i;
+      card.status = this.item.color;
       this.dataService.updateCard(card.$key!, card);
     });
   }

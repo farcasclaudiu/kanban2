@@ -6,4 +6,5 @@ export class Card {
   isExpanded?: boolean;
   order?: number;
   created_at?: string;
+  status?: string;
 }

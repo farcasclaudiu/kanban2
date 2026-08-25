@@ -18,7 +18,7 @@
         <ul class="card-list">
         @for (card of cards; track card.$key) {
           <li class="card-item"
-              [style.border-left-color]="item.color"
+              [style.border-left-color]="card.status ?? item.color"
               cdkDrag
               [cdkDragData]="card">
               <app-card [item]="card">
