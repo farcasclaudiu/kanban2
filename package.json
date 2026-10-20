@@ -28,10 +28,10 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.2.8",
-    "@angular/cli": "^21.2.8",
+    "@angular/cli": "^22.2.3",
     "@angular/compiler-cli": "^21.2.19",
     "@types/jasmine": "~6.0.0",
-    "angular-eslint": "^21.3.1",
+    "angular-eslint": "^22.6.0",
     "jasmine-core": "~5.13.0",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
